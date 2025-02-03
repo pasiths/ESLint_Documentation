@@ -320,3 +320,13 @@ For the complete list of rules, visit the [ESLint rules documentation](https://e
 - Use the `lint:fix` script to automatically resolve minor issues.
 - Keep your `.eslintrc` file consistent across all projects.
 - Periodically review and update your ESLint configuration to align with modern practices.
+
+  ---
+
+**Company Name:** Endless Raven
+
+**Writer:** Pasith Senevirathna
+
+**Position:** Backend Developer and DevOps
+
+**Contact Email:** [pasith.senevi02@gmail.com](mailto:pasith.senevi02@gmail.com)
