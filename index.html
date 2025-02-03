@@ -1,963 +1,688 @@
-<html>
-
-<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<title>ESLint Documentation</title>
-	<style>
-		/* cspell:disable-file */
-		/* webkit printing magic: print all background colors */
-		html {
-			-webkit-print-color-adjust: exact;
-		}
-
-		* {
-			box-sizing: border-box;
-			-webkit-print-color-adjust: exact;
-		}
-
-		html,
-		body {
-			margin: 0;
-			padding: 0;
-		}
-
-		@media only screen {
-			body {
-				margin: 2em auto;
-				max-width: 900px;
-				color: rgb(55, 53, 47);
-			}
-		}
-
-		body {
-			line-height: 1.5;
-			white-space: pre-wrap;
-		}
-
-		a,
-		a.visited {
-			color: inherit;
-			text-decoration: underline;
-		}
-
-		.pdf-relative-link-path {
-			font-size: 80%;
-			color: #444;
-		}
-
-		h1,
-		h2,
-		h3 {
-			letter-spacing: -0.01em;
-			line-height: 1.2;
-			font-weight: 600;
-			margin-bottom: 0;
-		}
-
-		.page-title {
-			font-size: 2.5rem;
-			font-weight: 700;
-			margin-top: 0;
-			margin-bottom: 0.75em;
-		}
-
-		h1 {
-			font-size: 1.875rem;
-			margin-top: 1.875rem;
-		}
-
-		h2 {
-			font-size: 1.5rem;
-			margin-top: 1.5rem;
-		}
-
-		h3 {
-			font-size: 1.25rem;
-			margin-top: 1.25rem;
-		}
-
-		.source {
-			border: 1px solid #ddd;
-			border-radius: 3px;
-			padding: 1.5em;
-			word-break: break-all;
-		}
-
-		.callout {
-			border-radius: 3px;
-			padding: 1rem;
-		}
-
-		figure {
-			margin: 1.25em 0;
-			page-break-inside: avoid;
-		}
-
-		figcaption {
-			opacity: 0.5;
-			font-size: 85%;
-			margin-top: 0.5em;
-		}
-
-		mark {
-			background-color: transparent;
-		}
-
-		.indented {
-			padding-left: 1.5em;
-		}
-
-		hr {
-			background: transparent;
-			display: block;
-			width: 100%;
-			height: 1px;
-			visibility: visible;
-			border: none;
-			border-bottom: 1px solid rgba(55, 53, 47, 0.09);
-		}
-
-		img {
-			max-width: 100%;
-		}
-
-		@media only print {
-			img {
-				max-height: 100vh;
-				object-fit: contain;
-			}
-		}
-
-		@page {
-			margin: 1in;
-		}
-
-		.collection-content {
-			font-size: 0.875rem;
-		}
-
-		.column-list {
-			display: flex;
-			justify-content: space-between;
-		}
-
-		.column {
-			padding: 0 1em;
-		}
-
-		.column:first-child {
-			padding-left: 0;
-		}
-
-		.column:last-child {
-			padding-right: 0;
-		}
-
-		.table_of_contents-item {
-			display: block;
-			font-size: 0.875rem;
-			line-height: 1.3;
-			padding: 0.125rem;
-		}
-
-		.table_of_contents-indent-1 {
-			margin-left: 1.5rem;
-		}
-
-		.table_of_contents-indent-2 {
-			margin-left: 3rem;
-		}
-
-		.table_of_contents-indent-3 {
-			margin-left: 4.5rem;
-		}
-
-		.table_of_contents-link {
-			text-decoration: none;
-			opacity: 0.7;
-			border-bottom: 1px solid rgba(55, 53, 47, 0.18);
-		}
-
-		table,
-		th,
-		td {
-			border: 1px solid rgba(55, 53, 47, 0.09);
-			border-collapse: collapse;
-		}
-
-		table {
-			border-left: none;
-			border-right: none;
-		}
-
-		th,
-		td {
-			font-weight: normal;
-			padding: 0.25em 0.5em;
-			line-height: 1.5;
-			min-height: 1.5em;
-			text-align: left;
-		}
-
-		th {
-			color: rgba(55, 53, 47, 0.6);
-		}
-
-		ol,
-		ul {
-			margin: 0;
-			margin-block-start: 0.6em;
-			margin-block-end: 0.6em;
-		}
-
-		li>ol:first-child,
-		li>ul:first-child {
-			margin-block-start: 0.6em;
-		}
-
-		ul>li {
-			list-style: disc;
-		}
-
-		ul.to-do-list {
-			padding-inline-start: 0;
-		}
-
-		ul.to-do-list>li {
-			list-style: none;
-		}
-
-		.to-do-children-checked {
-			text-decoration: line-through;
-			opacity: 0.375;
-		}
-
-		ul.toggle>li {
-			list-style: none;
-		}
-
-		ul {
-			padding-inline-start: 1.7em;
-		}
-
-		ul>li {
-			padding-left: 0.1em;
-		}
-
-		ol {
-			padding-inline-start: 1.6em;
-		}
-
-		ol>li {
-			padding-left: 0.2em;
-		}
-
-		.mono ol {
-			padding-inline-start: 2em;
-		}
-
-		.mono ol>li {
-			text-indent: -0.4em;
-		}
-
-		.toggle {
-			padding-inline-start: 0em;
-			list-style-type: none;
-		}
-
-		/* Indent toggle children */
-		.toggle>li>details {
-			padding-left: 1.7em;
-		}
-
-		.toggle>li>details>summary {
-			margin-left: -1.1em;
-		}
-
-		.selected-value {
-			display: inline-block;
-			padding: 0 0.5em;
-			background: rgba(206, 205, 202, 0.5);
-			border-radius: 3px;
-			margin-right: 0.5em;
-			margin-top: 0.3em;
-			margin-bottom: 0.3em;
-			white-space: nowrap;
-		}
-
-		.collection-title {
-			display: inline-block;
-			margin-right: 1em;
-		}
-
-		.page-description {
-			margin-bottom: 2em;
-		}
-
-		.simple-table {
-			margin-top: 1em;
-			font-size: 0.875rem;
-			empty-cells: show;
-		}
-
-		.simple-table td {
-			height: 29px;
-			min-width: 120px;
-		}
-
-		.simple-table th {
-			height: 29px;
-			min-width: 120px;
-		}
-
-		.simple-table-header-color {
-			background: rgb(247, 246, 243);
-			color: black;
-		}
-
-		.simple-table-header {
-			font-weight: 500;
-		}
-
-		time {
-			opacity: 0.5;
-		}
-
-		.icon {
-			display: inline-block;
-			max-width: 1.2em;
-			max-height: 1.2em;
-			text-decoration: none;
-			vertical-align: text-bottom;
-			margin-right: 0.5em;
-		}
-
-		img.icon {
-			border-radius: 3px;
-		}
-
-		.user-icon {
-			width: 1.5em;
-			height: 1.5em;
-			border-radius: 100%;
-			margin-right: 0.5rem;
-		}
-
-		.user-icon-inner {
-			font-size: 0.8em;
-		}
-
-		.text-icon {
-			border: 1px solid #000;
-			text-align: center;
-		}
-
-		.page-cover-image {
-			display: block;
-			object-fit: cover;
-			width: 100%;
-			max-height: 30vh;
-		}
-
-		.page-header-icon {
-			font-size: 3rem;
-			margin-bottom: 1rem;
-		}
-
-		.page-header-icon-with-cover {
-			margin-top: -0.72em;
-			margin-left: 0.07em;
-		}
-
-		.page-header-icon img {
-			border-radius: 3px;
-		}
-
-		.link-to-page {
-			margin: 1em 0;
-			padding: 0;
-			border: none;
-			font-weight: 500;
-		}
-
-		p>.user {
-			opacity: 0.5;
-		}
-
-		td>.user,
-		td>time {
-			white-space: nowrap;
-		}
-
-		input[type="checkbox"] {
-			transform: scale(1.5);
-			margin-right: 0.6em;
-			vertical-align: middle;
-		}
-
-		p {
-			margin-top: 0.5em;
-			margin-bottom: 0.5em;
-		}
-
-		.image {
-			border: none;
-			margin: 1.5em 0;
-			padding: 0;
-			border-radius: 0;
-			text-align: center;
-		}
-
-		.code,
-		code {
-			background: rgba(135, 131, 120, 0.15);
-			border-radius: 3px;
-			padding: 0.2em 0.4em;
-			border-radius: 3px;
-			font-size: 85%;
-			tab-size: 2;
-		}
-
-		code {
-			color: #eb5757;
-		}
-
-		.code {
-			padding: 1.5em 1em;
-		}
-
-		.code-wrap {
-			white-space: pre-wrap;
-			word-break: break-all;
-		}
-
-		.code>code {
-			background: none;
-			padding: 0;
-			font-size: 100%;
-			color: inherit;
-		}
-
-		blockquote {
-			font-size: 1.25em;
-			margin: 1em 0;
-			padding-left: 1em;
-			border-left: 3px solid rgb(55, 53, 47);
-		}
-
-		.bookmark {
-			text-decoration: none;
-			max-height: 8em;
-			padding: 0;
-			display: flex;
-			width: 100%;
-			align-items: stretch;
-		}
-
-		.bookmark-title {
-			font-size: 0.85em;
-			overflow: hidden;
-			text-overflow: ellipsis;
-			height: 1.75em;
-			white-space: nowrap;
-		}
-
-		.bookmark-text {
-			display: flex;
-			flex-direction: column;
-		}
-
-		.bookmark-info {
-			flex: 4 1 180px;
-			padding: 12px 14px 14px;
-			display: flex;
-			flex-direction: column;
-			justify-content: space-between;
-		}
-
-		.bookmark-image {
-			width: 33%;
-			flex: 1 1 180px;
-			display: block;
-			position: relative;
-			object-fit: cover;
-			border-radius: 1px;
-		}
-
-		.bookmark-description {
-			color: rgba(55, 53, 47, 0.6);
-			font-size: 0.75em;
-			overflow: hidden;
-			max-height: 4.5em;
-			word-break: break-word;
-		}
-
-		.bookmark-href {
-			font-size: 0.75em;
-			margin-top: 0.25em;
-		}
-
-		.sans {
-			font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
-		}
-
-		.code {
-			font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace;
-		}
-
-		.serif {
-			font-family: Lyon-Text, Georgia, ui-serif, serif;
-		}
-
-		.mono {
-			font-family: iawriter-mono, Nitti, Menlo, Courier, monospace;
-		}
-
-		.pdf .sans {
-			font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP';
-		}
-
-		.pdf:lang(zh-CN) .sans {
-			font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC';
-		}
-
-		.pdf:lang(zh-TW) .sans {
-			font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC';
-		}
-
-		.pdf:lang(ko-KR) .sans {
-			font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR';
-		}
-
-		.pdf .code {
-			font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP';
-		}
-
-		.pdf:lang(zh-CN) .code {
-			font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC';
-		}
-
-		.pdf:lang(zh-TW) .code {
-			font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC';
-		}
-
-		.pdf:lang(ko-KR) .code {
-			font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR';
-		}
-
-		.pdf .serif {
-			font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP';
-		}
-
-		.pdf:lang(zh-CN) .serif {
-			font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC';
-		}
-
-		.pdf:lang(zh-TW) .serif {
-			font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC';
-		}
-
-		.pdf:lang(ko-KR) .serif {
-			font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR';
-		}
-
-		.pdf .mono {
-			font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP';
-		}
-
-		.pdf:lang(zh-CN) .mono {
-			font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC';
-		}
-
-		.pdf:lang(zh-TW) .mono {
-			font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC';
-		}
-
-		.pdf:lang(ko-KR) .mono {
-			font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR';
-		}
-
-		.highlight-default {
-			color: rgba(55, 53, 47, 1);
-		}
-
-		.highlight-gray {
-			color: rgba(120, 119, 116, 1);
-			fill: rgba(120, 119, 116, 1);
-		}
-
-		.highlight-brown {
-			color: rgba(159, 107, 83, 1);
-			fill: rgba(159, 107, 83, 1);
-		}
-
-		.highlight-orange {
-			color: rgba(217, 115, 13, 1);
-			fill: rgba(217, 115, 13, 1);
-		}
-
-		.highlight-yellow {
-			color: rgba(203, 145, 47, 1);
-			fill: rgba(203, 145, 47, 1);
-		}
-
-		.highlight-teal {
-			color: rgba(68, 131, 97, 1);
-			fill: rgba(68, 131, 97, 1);
-		}
-
-		.highlight-blue {
-			color: rgba(51, 126, 169, 1);
-			fill: rgba(51, 126, 169, 1);
-		}
-
-		.highlight-purple {
-			color: rgba(144, 101, 176, 1);
-			fill: rgba(144, 101, 176, 1);
-		}
-
-		.highlight-pink {
-			color: rgba(193, 76, 138, 1);
-			fill: rgba(193, 76, 138, 1);
-		}
-
-		.highlight-red {
-			color: rgba(212, 76, 71, 1);
-			fill: rgba(212, 76, 71, 1);
-		}
-
-		.highlight-default_background {
-			color: rgba(55, 53, 47, 1);
-		}
-
-		.highlight-gray_background {
-			background: rgba(241, 241, 239, 1);
-		}
-
-		.highlight-brown_background {
-			background: rgba(244, 238, 238, 1);
-		}
-
-		.highlight-orange_background {
-			background: rgba(251, 236, 221, 1);
-		}
-
-		.highlight-yellow_background {
-			background: rgba(251, 243, 219, 1);
-		}
-
-		.highlight-teal_background {
-			background: rgba(237, 243, 236, 1);
-		}
-
-		.highlight-blue_background {
-			background: rgba(231, 243, 248, 1);
-		}
-
-		.highlight-purple_background {
-			background: rgba(244, 240, 247, 0.8);
-		}
-
-		.highlight-pink_background {
-			background: rgba(249, 238, 243, 0.8);
-		}
-
-		.highlight-red_background {
-			background: rgba(253, 235, 236, 1);
-		}
-
-		.block-color-default {
-			color: inherit;
-			fill: inherit;
-		}
-
-		.block-color-gray {
-			color: rgba(120, 119, 116, 1);
-			fill: rgba(120, 119, 116, 1);
-		}
-
-		.block-color-brown {
-			color: rgba(159, 107, 83, 1);
-			fill: rgba(159, 107, 83, 1);
-		}
-
-		.block-color-orange {
-			color: rgba(217, 115, 13, 1);
-			fill: rgba(217, 115, 13, 1);
-		}
-
-		.block-color-yellow {
-			color: rgba(203, 145, 47, 1);
-			fill: rgba(203, 145, 47, 1);
-		}
-
-		.block-color-teal {
-			color: rgba(68, 131, 97, 1);
-			fill: rgba(68, 131, 97, 1);
-		}
-
-		.block-color-blue {
-			color: rgba(51, 126, 169, 1);
-			fill: rgba(51, 126, 169, 1);
-		}
-
-		.block-color-purple {
-			color: rgba(144, 101, 176, 1);
-			fill: rgba(144, 101, 176, 1);
-		}
-
-		.block-color-pink {
-			color: rgba(193, 76, 138, 1);
-			fill: rgba(193, 76, 138, 1);
-		}
-
-		.block-color-red {
-			color: rgba(212, 76, 71, 1);
-			fill: rgba(212, 76, 71, 1);
-		}
-
-		.block-color-default_background {
-			color: inherit;
-			fill: inherit;
-		}
-
-		.block-color-gray_background {
-			background: rgba(241, 241, 239, 1);
-		}
-
-		.block-color-brown_background {
-			background: rgba(244, 238, 238, 1);
-		}
-
-		.block-color-orange_background {
-			background: rgba(251, 236, 221, 1);
-		}
-
-		.block-color-yellow_background {
-			background: rgba(251, 243, 219, 1);
-		}
-
-		.block-color-teal_background {
-			background: rgba(237, 243, 236, 1);
-		}
-
-		.block-color-blue_background {
-			background: rgba(231, 243, 248, 1);
-		}
-
-		.block-color-purple_background {
-			background: rgba(244, 240, 247, 0.8);
-		}
-
-		.block-color-pink_background {
-			background: rgba(249, 238, 243, 0.8);
-		}
-
-		.block-color-red_background {
-			background: rgba(253, 235, 236, 1);
-		}
-
-		.select-value-color-uiBlue {
-			background-color: rgba(35, 131, 226, .07);
-		}
-
-		.select-value-color-pink {
-			background-color: rgba(245, 224, 233, 1);
-		}
-
-		.select-value-color-purple {
-			background-color: rgba(232, 222, 238, 1);
-		}
-
-		.select-value-color-green {
-			background-color: rgba(219, 237, 219, 1);
-		}
-
-		.select-value-color-gray {
-			background-color: rgba(227, 226, 224, 1);
-		}
-
-		.select-value-color-transparentGray {
-			background-color: rgba(227, 226, 224, 0);
-		}
-
-		.select-value-color-translucentGray {
-			background-color: rgba(0, 0, 0, 0.06);
-		}
-
-		.select-value-color-orange {
-			background-color: rgba(250, 222, 201, 1);
-		}
-
-		.select-value-color-brown {
-			background-color: rgba(238, 224, 218, 1);
-		}
-
-		.select-value-color-red {
-			background-color: rgba(255, 226, 221, 1);
-		}
-
-		.select-value-color-yellow {
-			background-color: rgba(253, 236, 200, 1);
-		}
-
-		.select-value-color-blue {
-			background-color: rgba(211, 229, 239, 1);
-		}
-
-		.select-value-color-pageGlass {
-			background-color: undefined;
-		}
-
-		.select-value-color-washGlass {
-			background-color: undefined;
-		}
-
-		.checkbox {
-			display: inline-flex;
-			vertical-align: text-bottom;
-			width: 16;
-			height: 16;
-			background-size: 16px;
-			margin-left: 2px;
-			margin-right: 5px;
-		}
-
-		.checkbox-on {
-			background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
-		}
-
-		.checkbox-off {
-			background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
-		}
-	</style>
-</head>
-
-<body>
-	<article id="1854cc74-3d8b-808c-9ce0-fa7da2a7dab8" class="page sans">
-		<header>
-			<h1 class="page-title">ESLint Documentation</h1>
-			<p class="page-description"></p>
-		</header>
-		<div class="page-body">
-			<p id="1854cc74-3d8b-80bb-a68e-d0e8f6e9fb6d" class="">This document provides a comprehensive guide to
-				setting up and use ESLint in your projects.</p>
-			<p id="1854cc74-3d8b-806d-b8d5-c410464ccee4" class="">It covers ESLint installation, configuration, rules,
-				and best practices.</p>
-			<p id="1854cc74-3d8b-80c5-a824-c086066a1b94" class="">
-			</p>
-			<details open="">
-				<summary style="font-weight:600;font-size:1.5em;line-height:1.3;margin:0">What is ESLint?</summary>
-				<div class="indented">
-					<p id="1854cc74-3d8b-80a4-8b9e-dfeab5da6e01" class="">ESLint is a popular linting tool for
-						JavaScript and TypeScript. It helps developers find and fix problems in their code, ensuring
-						code quality and adherence to best practices.</p>
-				</div>
-			</details>
-			<details open="">
-				<summary style="font-weight:600;font-size:1.5em;line-height:1.3;margin:0">Installation</summary>
-				<div class="indented">
-					<details open="">
-						<summary style="font-weight:600;font-size:1.25em;line-height:1.3;margin:0">
-							<strong>Prerequisites</strong></summary>
-						<div class="indented">
-							<ul id="1854cc74-3d8b-8093-a54f-f82eca0e6861" class="bulleted-list">
-								<li style="list-style-type:disc">Node.js and npm must be installed.</li>
-							</ul>
-							<ul id="1854cc74-3d8b-8067-88ed-c8914e1b9657" class="bulleted-list">
-								<li style="list-style-type:disc">A JavaScript or TypeScript project.</li>
-							</ul>
-						</div>
-					</details>
-					<details open="">
-						<summary style="font-weight:600;font-size:1.25em;line-height:1.3;margin:0">Steps to install
-							ESLint</summary>
-						<div class="indented">
-							<ol type="1" id="1854cc74-3d8b-801b-a251-ef1bbb2956c0" class="numbered-list" start="1">
-								<li>Navigate to your project directory:
-									<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"
-										integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg=="
-										crossorigin="anonymous" referrerPolicy="no-referrer"></script>
-									<link rel="stylesheet"
-										href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css"
-										integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ=="
-										crossorigin="anonymous" referrerPolicy="no-referrer" />
-									<pre id="1854cc74-3d8b-80f3-b26c-e5fcadb5734f"
-										class="code"><code class="language-JavaScript">cd /path/to/your/project</code></pre>
-								</li>
-							</ol>
-							<ol type="1" id="1854cc74-3d8b-8027-b107-d2736b8ed98c" class="numbered-list" start="2">
-								<li>Install ESLint as a development dependency:
-									<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"
-										integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg=="
-										crossorigin="anonymous" referrerPolicy="no-referrer"></script>
-									<link rel="stylesheet"
-										href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css"
-										integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ=="
-										crossorigin="anonymous" referrerPolicy="no-referrer" />
-									<pre id="1854cc74-3d8b-8040-bd4b-c91a5f92214d"
-										class="code"><code class="language-JavaScript">npm install eslint --save-dev</code></pre>
-								</li>
-							</ol>
-						</div>
-					</details>
-				</div>
-			</details>
-			<details open="">
-				<summary style="font-weight:600;font-size:1.5em;line-height:1.3;margin:0">Initial Setup</summary>
-				<div class="indented">
-					<details open="">
-						<summary style="font-weight:600;font-size:1.25em;line-height:1.3;margin:0">Creating an ESLint
-							Configuration File</summary>
-						<div class="indented">
-							<ol type="1" id="1854cc74-3d8b-8007-baa0-d72173288f9e" class="numbered-list" start="1">
-								<li>Run the ESLint initialization command:</li>
-							</ol>
-							<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"
-								integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg=="
-								crossorigin="anonymous" referrerPolicy="no-referrer"></script>
-							<link rel="stylesheet"
-								href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css"
-								integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ=="
-								crossorigin="anonymous" referrerPolicy="no-referrer" />
-							<pre id="18b4cc74-3d8b-8061-8093-dd027cb2802f"
-								class="code"><code class="language-JavaScript">npx eslint --init</code></pre>
-							<ol type="1" id="1854cc74-3d8b-802c-9583-ce4e77edf3b3" class="numbered-list" start="1">
-								<li>Answer the prompts to customize ESLint<ul id="1854cc74-3d8b-807d-bcd4-fcfadd51bb7b"
-										class="bulleted-list">
-										<li style="list-style-type:disc">Choose the type of project (e.g. JavaScript or
-											TypeScript)</li>
-									</ul>
-									<ul id="1854cc74-3d8b-802e-830e-f6b0cf76d306" class="bulleted-list">
-										<li style="list-style-type:disc">Select a preferred style guide </li>
-									</ul>
-									<ul id="1854cc74-3d8b-80ac-8602-f8b19b7e6863" class="bulleted-list">
-										<li style="list-style-type:disc">Specify the environment (e.g. Node.js, Browser)
-										</li>
-									</ul>
-									<ul id="1854cc74-3d8b-8052-bb8a-ee098eaa9b0b" class="bulleted-list">
-										<li style="list-style-type:disc">Enable or disable TypeScript support</li>
-									</ul>
-								</li>
-							</ol>
-							<ol type="1" id="1854cc74-3d8b-8054-bee3-d024ea30009e" class="numbered-list" start="2">
-								<li>This generates an <code>.eslintrc</code> file in your project root.</li>
-							</ol>
-						</div>
-					</details>
-					<details open="">
-						<summary style="font-weight:600;font-size:1.25em;line-height:1.3;margin:0"><strong>Example
-								Configuration (</strong><code><strong>.eslintrc.json</strong></code><strong>)</strong>
-						</summary>
-						<div class="indented">
-							<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"
-								integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg=="
-								crossorigin="anonymous" referrerPolicy="no-referrer"></script>
-							<link rel="stylesheet"
-								href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css"
-								integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ=="
-								crossorigin="anonymous" referrerPolicy="no-referrer" />
-							<pre id="1874cc74-3d8b-805b-a6e0-f3112de9ebdc" class="code"><code class="language-JavaScript">import globals from &quot;globals&quot;;
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>ESLint Documentation</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+	margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-default_background {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-default_background {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-transparentGray { background-color: rgba(227, 226, 224, 0); }
+.select-value-color-translucentGray { background-color: rgba(0, 0, 0, 0.06); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="1854cc74-3d8b-808c-9ce0-fa7da2a7dab8" class="page sans"><header><h1 class="page-title">ESLint Documentation</h1><p class="page-description"></p></header><div class="page-body"><p id="1854cc74-3d8b-80bb-a68e-d0e8f6e9fb6d" class="">This document provides a comprehensive guide to setting up and use ESLint in your projects.</p><p id="1854cc74-3d8b-806d-b8d5-c410464ccee4" class="">It covers ESLint installation, configuration, rules, and best practices.</p><p id="1854cc74-3d8b-80c5-a824-c086066a1b94" class="">
+</p><details open=""><summary style="font-weight:600;font-size:1.5em;line-height:1.3;margin:0">What is ESLint?</summary><div class="indented"><p id="1854cc74-3d8b-80a4-8b9e-dfeab5da6e01" class="">ESLint is a popular linting tool for JavaScript and TypeScript. It helps developers find and fix problems in their code, ensuring code quality and adherence to best practices.</p></div></details><details open=""><summary style="font-weight:600;font-size:1.5em;line-height:1.3;margin:0">Installation</summary><div class="indented"><details open=""><summary style="font-weight:600;font-size:1.25em;line-height:1.3;margin:0"><strong>Prerequisites</strong></summary><div class="indented"><ul id="1854cc74-3d8b-8093-a54f-f82eca0e6861" class="bulleted-list"><li style="list-style-type:disc">Node.js and npm must be installed.</li></ul><ul id="1854cc74-3d8b-8067-88ed-c8914e1b9657" class="bulleted-list"><li style="list-style-type:disc">A JavaScript or TypeScript project.</li></ul></div></details><details open=""><summary style="font-weight:600;font-size:1.25em;line-height:1.3;margin:0">Steps to install ESLint</summary><div class="indented"><ol type="1" id="1854cc74-3d8b-801b-a251-ef1bbb2956c0" class="numbered-list" start="1"><li>Navigate to your project directory:<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1854cc74-3d8b-80f3-b26c-e5fcadb5734f" class="code"><code class="language-JavaScript">cd /path/to/your/project</code></pre></li></ol><ol type="1" id="1854cc74-3d8b-8027-b107-d2736b8ed98c" class="numbered-list" start="2"><li>Install ESLint as a development dependency:<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1854cc74-3d8b-8040-bd4b-c91a5f92214d" class="code"><code class="language-JavaScript">npm install eslint --save-dev</code></pre></li></ol></div></details></div></details><details open=""><summary style="font-weight:600;font-size:1.5em;line-height:1.3;margin:0">Initial Setup</summary><div class="indented"><details open=""><summary style="font-weight:600;font-size:1.25em;line-height:1.3;margin:0">Creating an ESLint Configuration File</summary><div class="indented"><ol type="1" id="1854cc74-3d8b-8007-baa0-d72173288f9e" class="numbered-list" start="1"><li>Run the ESLint initialization command:</li></ol><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="18b4cc74-3d8b-8061-8093-dd027cb2802f" class="code"><code class="language-JavaScript">npx eslint --init</code></pre><ol type="1" id="1854cc74-3d8b-802c-9583-ce4e77edf3b3" class="numbered-list" start="1"><li>Answer the prompts to customize ESLint<ul id="1854cc74-3d8b-807d-bcd4-fcfadd51bb7b" class="bulleted-list"><li style="list-style-type:disc">Choose the type of project (e.g. JavaScript or TypeScript)</li></ul><ul id="1854cc74-3d8b-802e-830e-f6b0cf76d306" class="bulleted-list"><li style="list-style-type:disc">Select a preferred style guide </li></ul><ul id="1854cc74-3d8b-80ac-8602-f8b19b7e6863" class="bulleted-list"><li style="list-style-type:disc">Specify the environment (e.g. Node.js, Browser)</li></ul><ul id="1854cc74-3d8b-8052-bb8a-ee098eaa9b0b" class="bulleted-list"><li style="list-style-type:disc">Enable or disable TypeScript support</li></ul></li></ol><ol type="1" id="1854cc74-3d8b-8054-bee3-d024ea30009e" class="numbered-list" start="2"><li>This generates an <code>.eslintrc</code> file in your project root.</li></ol></div></details><details open=""><summary style="font-weight:600;font-size:1.25em;line-height:1.3;margin:0"><strong>Example Configuration (</strong><code><strong>.eslintrc.json</strong></code><strong>)</strong></summary><div class="indented"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1874cc74-3d8b-805b-a6e0-f3112de9ebdc" class="code"><code class="language-JavaScript">import globals from &quot;globals&quot;;
 import pluginJs from &quot;@eslint/js&quot;;
 
 /** @type {import(&#x27;eslint&#x27;).Linter.Config[]} */
@@ -982,76 +707,15 @@ export default [
       &quot;prefer-const&quot;: &quot;warn&quot;
     },
   },
-];</code></pre>
-						</div>
-					</details>
-				</div>
-			</details>
-			<details open="">
-				<summary style="font-weight:600;font-size:1.5em;line-height:1.3;margin:0">Updating Files</summary>
-				<div class="indented">
-					<details open="">
-						<summary style="font-weight:600;font-size:1.25em;line-height:1.3;margin:0"><strong>Adding ESLint
-								to </strong><code><strong>package.json</strong></code></summary>
-						<div class="indented">
-							<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"
-								integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg=="
-								crossorigin="anonymous" referrerPolicy="no-referrer"></script>
-							<link rel="stylesheet"
-								href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css"
-								integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ=="
-								crossorigin="anonymous" referrerPolicy="no-referrer" />
-							<pre id="1874cc74-3d8b-80d6-896a-eb6a816a6ced" class="code"><code class="language-JSON"> &quot;scripts&quot;: {
+];</code></pre></div></details></div></details><details open=""><summary style="font-weight:600;font-size:1.5em;line-height:1.3;margin:0">Updating Files</summary><div class="indented"><details open=""><summary style="font-weight:600;font-size:1.25em;line-height:1.3;margin:0"><strong>Adding ESLint to </strong><code><strong>package.json</strong></code></summary><div class="indented"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1874cc74-3d8b-80d6-896a-eb6a816a6ced" class="code"><code class="language-JSON"> &quot;scripts&quot;: {
     &quot;start&quot;: &quot;node index.js&quot;,
     &quot;dev&quot;: &quot;nodemon index.js&quot;,
     &quot;lint&quot;: &quot;eslint .&quot;,
     &quot;lint:fix&quot;: &quot;eslint . --fix&quot;
-  },</code></pre>
-						</div>
-					</details>
-					<details open="">
-						<summary style="font-weight:600;font-size:1.25em;line-height:1.3;margin:0"><strong>Ignoring
-								Files with </strong><code><strong>.eslintignore</strong></code></summary>
-						<div class="indented">
-							<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"
-								integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg=="
-								crossorigin="anonymous" referrerPolicy="no-referrer"></script>
-							<link rel="stylesheet"
-								href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css"
-								integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ=="
-								crossorigin="anonymous" referrerPolicy="no-referrer" />
-							<pre id="1874cc74-3d8b-8033-97de-d1d6566b66c9" class="code"><code class="language-undefined">node_modules/
+  },</code></pre></div></details><details open=""><summary style="font-weight:600;font-size:1.25em;line-height:1.3;margin:0"><strong>Ignoring Files with </strong><code><strong>.eslintignore</strong></code></summary><div class="indented"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1874cc74-3d8b-8033-97de-d1d6566b66c9" class="code"><code class="language-undefined">node_modules/
 dist/
 build/
-</code></pre>
-						</div>
-					</details>
-				</div>
-			</details>
-			<details open="">
-				<summary style="font-weight:600;font-size:1.5em;line-height:1.3;margin:0">Configuring Rules</summary>
-				<div class="indented">
-					<h3 id="1874cc74-3d8b-80e5-b32f-c8e79d6b0df3" class="">Enabling and Disabling Rules</h3>
-					<p id="1874cc74-3d8b-804f-a26c-e58df54456c5" class="">Rules can be configured in the
-						<code>.eslintrc</code> file:</p>
-					<ul id="1874cc74-3d8b-80ca-b658-e59824b2961b" class="bulleted-list">
-						<li style="list-style-type:disc"><mark class="highlight-red"><strong>Error</strong></mark>
-							level: Marks violations as errors.</li>
-					</ul>
-					<ul id="1874cc74-3d8b-806b-9488-d5269c896369" class="bulleted-list">
-						<li style="list-style-type:disc"><mark class="highlight-yellow"><strong>Warning</strong></mark>
-							level: Marks violations as warnings.<details open="">
-								<summary style="font-weight:600;font-size:1.25em;line-height:1.3;margin:0">Example:
-								</summary>
-								<div class="indented">
-									<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"
-										integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg=="
-										crossorigin="anonymous" referrerPolicy="no-referrer"></script>
-									<link rel="stylesheet"
-										href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css"
-										integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ=="
-										crossorigin="anonymous" referrerPolicy="no-referrer" />
-									<pre id="1874cc74-3d8b-80e2-955b-d9b077dcd6d4" class="code"><code class="language-JavaScript">rules: {
+</code></pre></div></details></div></details><details open=""><summary style="font-weight:600;font-size:1.5em;line-height:1.3;margin:0">Configuring Rules</summary><div class="indented"><h3 id="1874cc74-3d8b-80e5-b32f-c8e79d6b0df3" class="">Enabling and Disabling Rules</h3><p id="1874cc74-3d8b-804f-a26c-e58df54456c5" class="">Rules can be configured in the <code>.eslintrc</code> file:</p><ul id="1874cc74-3d8b-80ca-b658-e59824b2961b" class="bulleted-list"><li style="list-style-type:disc"><mark class="highlight-red"><strong>Error</strong></mark> level: Marks violations as errors.</li></ul><ul id="1874cc74-3d8b-806b-9488-d5269c896369" class="bulleted-list"><li style="list-style-type:disc"><mark class="highlight-yellow"><strong>Warning</strong></mark> level: Marks violations as warnings.<details open=""><summary style="font-weight:600;font-size:1.25em;line-height:1.3;margin:0">Example:</summary><div class="indented"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1874cc74-3d8b-80e2-955b-d9b077dcd6d4" class="code"><code class="language-JavaScript">rules: {
       &quot;no-console&quot;: &quot;warn&quot;,
       &quot;no-debugger&quot;: &quot;error&quot;,
       curly: [&quot;error&quot;, &quot;all&quot;],
@@ -1060,22 +724,7 @@ build/
       &quot;no-unused-expressions&quot;: &quot;warn&quot;,
       yoda: [&quot;error&quot;, &quot;never&quot;],
       &quot;prefer-const&quot;: &quot;warn&quot;
-    },</code></pre>
-									<details open="">
-										<summary style="font-weight:600;font-size:1.25em;line-height:1.3;margin:0">
-											<code>&quot;no-console&quot;: &quot;warn&quot;</code></summary>
-										<div class="indented">
-											<p id="1874cc74-3d8b-8029-8c28-e49ad6dcc393" class="">This rule error when
-												<code>console.*</code> or similar methods are used.</p>
-											<script
-												src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"
-												integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg=="
-												crossorigin="anonymous" referrerPolicy="no-referrer"></script>
-											<link rel="stylesheet"
-												href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css"
-												integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ=="
-												crossorigin="anonymous" referrerPolicy="no-referrer" />
-											<pre id="1874cc74-3d8b-80ba-a5ea-c525bbc17156" class="code"><code class="language-JavaScript">// Example (will trigger an error):
+    },</code></pre><details open=""><summary style="font-weight:600;font-size:1.25em;line-height:1.3;margin:0"> <code>&quot;no-console&quot;: &quot;warn&quot;</code></summary><div class="indented"><p id="1874cc74-3d8b-8029-8c28-e49ad6dcc393" class="">This rule error when <code>console.*</code> or similar methods are used.</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1874cc74-3d8b-80ba-a5ea-c525bbc17156" class="code"><code class="language-JavaScript">// Example (will trigger an error):
 console.log(&quot;This is a log message.&quot;);
 console.warn(&quot;This is a warning.&quot;);
 console.error(&quot;This is an error.&quot;);
@@ -1091,72 +740,19 @@ logger.error(&quot;This is an error message.&quot;);
 // Or simply remove unnecessary logging:
 function processData() {
   // Do something meaningful without logging to the console.
-}</code></pre>
-										</div>
-									</details>
-									<details open="">
-										<summary style="font-weight:600;font-size:1.25em;line-height:1.3;margin:0">
-											<code>&quot;no-debugger&quot;: &quot;error&quot;</code></summary>
-										<div class="indented">
-											<p id="1874cc74-3d8b-801c-9007-fc742f38133a" class="">This rule prevents the
-												use of <code>debugger</code> statements.</p>
-											<script
-												src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"
-												integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg=="
-												crossorigin="anonymous" referrerPolicy="no-referrer"></script>
-											<link rel="stylesheet"
-												href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css"
-												integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ=="
-												crossorigin="anonymous" referrerPolicy="no-referrer" />
-											<pre id="1874cc74-3d8b-80db-9c48-e6081192ace4" class="code"><code class="language-JavaScript">// Example (will trigger an error):
+}</code></pre></div></details><details open=""><summary style="font-weight:600;font-size:1.25em;line-height:1.3;margin:0"><code>&quot;no-debugger&quot;: &quot;error&quot;</code></summary><div class="indented"><p id="1874cc74-3d8b-801c-9007-fc742f38133a" class="">This rule prevents the use of <code>debugger</code> statements.</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1874cc74-3d8b-80db-9c48-e6081192ace4" class="code"><code class="language-JavaScript">// Example (will trigger an error):
 debugger;
 
 // Corrected:
 console.log(&quot;Debugging information&quot;); // Replace with logging or remove.
-</code></pre>
-										</div>
-									</details>
-									<details open="">
-										<summary style="font-weight:600;font-size:1.25em;line-height:1.3;margin:0">
-											<code>curly: [&quot;error&quot;, &quot;all&quot;]</code></summary>
-										<div class="indented">
-											<p id="1874cc74-3d8b-8002-be3d-f6019261bbbb" class="">This rule enforces
-												using braces for all control statements, even for single-line blocks.
-											</p>
-											<script
-												src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"
-												integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg=="
-												crossorigin="anonymous" referrerPolicy="no-referrer"></script>
-											<link rel="stylesheet"
-												href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css"
-												integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ=="
-												crossorigin="anonymous" referrerPolicy="no-referrer" />
-											<pre id="1874cc74-3d8b-8017-b3b5-c8afd5f47692" class="code"><code class="language-JavaScript">// Example (will trigger an error):
+</code></pre></div></details><details open=""><summary style="font-weight:600;font-size:1.25em;line-height:1.3;margin:0"><code>curly: [&quot;error&quot;, &quot;all&quot;]</code></summary><div class="indented"><p id="1874cc74-3d8b-8002-be3d-f6019261bbbb" class="">This rule enforces using braces for all control statements, even for single-line blocks.</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1874cc74-3d8b-8017-b3b5-c8afd5f47692" class="code"><code class="language-JavaScript">// Example (will trigger an error):
 if (condition) console.log(&quot;Do something&quot;);
 
 // Corrected:
 if (condition) {
   console.log(&quot;Do something&quot;);
 }
-</code></pre>
-										</div>
-									</details>
-									<details open="">
-										<summary style="font-weight:600;font-size:1.25em;line-height:1.3;margin:0">
-											<code>eqeqeq: [&quot;error&quot;, &quot;always&quot;]</code></summary>
-										<div class="indented">
-											<p id="1874cc74-3d8b-803b-886e-d55cc0ba8687" class="">This rule enforces the
-												use of strict equality (<code>===</code>) instead of loose equality
-												(<code>==</code>).</p>
-											<script
-												src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"
-												integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg=="
-												crossorigin="anonymous" referrerPolicy="no-referrer"></script>
-											<link rel="stylesheet"
-												href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css"
-												integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ=="
-												crossorigin="anonymous" referrerPolicy="no-referrer" />
-											<pre id="1874cc74-3d8b-80e0-8e4f-fd16a5d0f299" class="code"><code class="language-JavaScript">// Example (will trigger an error):
+</code></pre></div></details><details open=""><summary style="font-weight:600;font-size:1.25em;line-height:1.3;margin:0"><code>eqeqeq: [&quot;error&quot;, &quot;always&quot;]</code></summary><div class="indented"><p id="1874cc74-3d8b-803b-886e-d55cc0ba8687" class="">This rule enforces the use of strict equality (<code>===</code>) instead of loose equality (<code>==</code>).</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1874cc74-3d8b-80e0-8e4f-fd16a5d0f299" class="code"><code class="language-JavaScript">// Example (will trigger an error):
 if (value == 5) {
   console.log(&quot;Match!&quot;);
 }
@@ -1165,48 +761,13 @@ if (value == 5) {
 if (value === 5) {
   console.log(&quot;Match!&quot;);
 }
-</code></pre>
-										</div>
-									</details>
-									<details open="">
-										<summary style="font-weight:600;font-size:1.25em;line-height:1.3;margin:0">
-											<code>&quot;no-eval&quot;: &quot;error&quot;</code></summary>
-										<div class="indented">
-											<p id="1874cc74-3d8b-8054-9a42-f53428f6a7b2" class="">This rule warns about
-												expressions that do nothing (like standalone function calls or
-												assignments).</p>
-											<script
-												src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"
-												integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg=="
-												crossorigin="anonymous" referrerPolicy="no-referrer"></script>
-											<link rel="stylesheet"
-												href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css"
-												integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ=="
-												crossorigin="anonymous" referrerPolicy="no-referrer" />
-											<pre id="1874cc74-3d8b-8022-afe5-d4bed1747019" class="code"><code class="language-JavaScript" style="white-space:pre-wrap;word-break:break-all">// Example (will trigger a warning):
+</code></pre></div></details><details open=""><summary style="font-weight:600;font-size:1.25em;line-height:1.3;margin:0"><code>&quot;no-eval&quot;: &quot;error&quot;</code></summary><div class="indented"><p id="1874cc74-3d8b-8054-9a42-f53428f6a7b2" class="">This rule warns about expressions that do nothing (like standalone function calls or assignments).</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1874cc74-3d8b-8022-afe5-d4bed1747019" class="code"><code class="language-JavaScript" style="white-space:pre-wrap;word-break:break-all">// Example (will trigger a warning):
 condition &amp;&amp; doSomething();
 
 // Corrected:
 if (condition) {
   doSomething();
-}</code></pre>
-										</div>
-									</details>
-									<details open="">
-										<summary style="font-weight:600;font-size:1.25em;line-height:1.3;margin:0">
-											<code>&quot;indent&quot;: [&quot;error&quot;, 2]</code></summary>
-										<div class="indented">
-											<p id="1874cc74-3d8b-80d3-9b66-f7d807fb3c45" class="">Enforces consistent
-												indentation with <strong>2 spaces</strong>.</p>
-											<script
-												src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"
-												integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg=="
-												crossorigin="anonymous" referrerPolicy="no-referrer"></script>
-											<link rel="stylesheet"
-												href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css"
-												integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ=="
-												crossorigin="anonymous" referrerPolicy="no-referrer" />
-											<pre id="1874cc74-3d8b-80ac-9d90-cf74dc31e4d5" class="code"><code class="language-JavaScript" style="white-space:pre-wrap;word-break:break-all">// Example (will trigger an error):
+}</code></pre></div></details><details open=""><summary style="font-weight:600;font-size:1.25em;line-height:1.3;margin:0"> <code>&quot;indent&quot;: [&quot;error&quot;, 2]</code></summary><div class="indented"><p id="1874cc74-3d8b-80d3-9b66-f7d807fb3c45" class="">Enforces consistent indentation with <strong>2 spaces</strong>.</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1874cc74-3d8b-80ac-9d90-cf74dc31e4d5" class="code"><code class="language-JavaScript" style="white-space:pre-wrap;word-break:break-all">// Example (will trigger an error):
 function greet() {
       console.log(&quot;Hello!&quot;); // Indented with 6 spaces.
 }
@@ -1214,340 +775,17 @@ function greet() {
 // Corrected:
 function greet() {
   console.log(&quot;Hello!&quot;); // Indented with 2 spaces.
-}</code></pre>
-										</div>
-									</details>
-									<details open="">
-										<summary style="font-weight:600;font-size:1.25em;line-height:1.3;margin:0">
-											<code>&quot;prefer-const&quot;: &quot;warn&quot;</code></summary>
-										<div class="indented">
-											<p id="18f4cc74-3d8b-8067-8797-f8b5cf56125b" class="">Enforces consistent
-												indentation with <strong>2 spaces</strong>.</p>
-											<script
-												src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"
-												integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg=="
-												crossorigin="anonymous" referrerPolicy="no-referrer"></script>
-											<link rel="stylesheet"
-												href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css"
-												integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ=="
-												crossorigin="anonymous" referrerPolicy="no-referrer" />
-											<pre id="18f4cc74-3d8b-806f-a555-ec6ae4d64772" class="code"><code class="language-JavaScript" style="white-space:pre-wrap;word-break:break-all">// Incorrect (Will Cause ESLint Error)
+}</code></pre></div></details><details open=""><summary style="font-weight:600;font-size:1.25em;line-height:1.3;margin:0"> <code>&quot;prefer-const&quot;: &quot;warn&quot;</code></summary><div class="indented"><p id="18f4cc74-3d8b-8067-8797-f8b5cf56125b" class="">Enforces consistent indentation with <strong>2 spaces</strong>.</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="18f4cc74-3d8b-806f-a555-ec6ae4d64772" class="code"><code class="language-JavaScript" style="white-space:pre-wrap;word-break:break-all">// Incorrect (Will Cause ESLint Error)
 let name = &quot;John&quot;; // &#x27;name&#x27; is never reassigned, so ESLint will throw an error
-console.log(name);</code></pre>
-											<script
-												src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"
-												integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg=="
-												crossorigin="anonymous" referrerPolicy="no-referrer"></script>
-											<link rel="stylesheet"
-												href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css"
-												integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ=="
-												crossorigin="anonymous" referrerPolicy="no-referrer" />
-											<pre id="18f4cc74-3d8b-805b-bc17-cf6ac05b52bd" class="code"><code class="language-JavaScript" style="white-space:pre-wrap;word-break:break-all">// Correct (If Value Doesn&#x27;t Change)
+console.log(name);</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="18f4cc74-3d8b-805b-bc17-cf6ac05b52bd" class="code"><code class="language-JavaScript" style="white-space:pre-wrap;word-break:break-all">// Correct (If Value Doesn&#x27;t Change)
 const name = &quot;John&quot;; // Use &#x27;const&#x27; because &#x27;name&#x27; is not changing
-console.log(name);</code></pre>
-											<script
-												src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"
-												integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg=="
-												crossorigin="anonymous" referrerPolicy="no-referrer"></script>
-											<link rel="stylesheet"
-												href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css"
-												integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ=="
-												crossorigin="anonymous" referrerPolicy="no-referrer" />
-											<pre id="18f4cc74-3d8b-80a7-825c-f82140b9e2e9" class="code"><code class="language-JavaScript" style="white-space:pre-wrap;word-break:break-all">// Correct (If Value Changes)
+console.log(name);</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="18f4cc74-3d8b-80a7-825c-f82140b9e2e9" class="code"><code class="language-JavaScript" style="white-space:pre-wrap;word-break:break-all">// Correct (If Value Changes)
 let username = &quot;John&quot;;
 username = &quot;Doe&quot;; // Now, &#x27;username&#x27; is changing, so &#x27;let&#x27; is valid
-console.log(username);</code></pre>
-										</div>
-									</details>
-								</div>
-							</details>
-						</li>
-					</ul>
-				</div>
-			</details>
-			<details open="">
-				<summary style="font-weight:600;font-size:1.5em;line-height:1.3;margin:0">Using ESLint</summary>
-				<div class="indented">
-					<details open="">
-						<summary style="font-weight:600;font-size:1.25em;line-height:1.3;margin:0">Linting Files
-						</summary>
-						<div class="indented">
-							<p id="1874cc74-3d8b-8058-97f1-f6357197d934" class="">To check your code for linting issues:
-							</p>
-							<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"
-								integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg=="
-								crossorigin="anonymous" referrerPolicy="no-referrer"></script>
-							<link rel="stylesheet"
-								href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css"
-								integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ=="
-								crossorigin="anonymous" referrerPolicy="no-referrer" />
-							<pre id="1874cc74-3d8b-806b-82cf-edec3ba29ca1"
-								class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">npm run lint</code></pre>
-						</div>
-					</details>
-					<details open="">
-						<summary style="font-weight:600;font-size:1.25em;line-height:1.3;margin:0">Auto-fixing Issues
-						</summary>
-						<div class="indented">
-							<p id="1874cc74-3d8b-8028-bc20-d46f5faec278" class="">To automatically fix issues where
-								possible:</p>
-							<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"
-								integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg=="
-								crossorigin="anonymous" referrerPolicy="no-referrer"></script>
-							<link rel="stylesheet"
-								href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css"
-								integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ=="
-								crossorigin="anonymous" referrerPolicy="no-referrer" />
-							<pre id="1874cc74-3d8b-8068-af2a-f4f1cdbc6776"
-								class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">npm run lint:fix</code></pre>
-						</div>
-					</details>
-				</div>
-			</details>
-			<details open="">
-				<summary style="font-weight:600;font-size:1.5em;line-height:1.3;margin:0">Integrations</summary>
-				<div class="indented">
-					<details open="">
-						<summary style="font-weight:600;font-size:1.25em;line-height:1.3;margin:0">VS Code</summary>
-						<div class="indented">
-							<ol type="1" id="1874cc74-3d8b-80e4-9d87-c114cc159845" class="numbered-list" start="1">
-								<li>Install the &quot;ESLint&quot; extension from the VS Code marketplace.</li>
-							</ol>
-							<ol type="1" id="1874cc74-3d8b-80d7-86ea-e7934b5ce22e" class="numbered-list" start="2">
-								<li>Enable &quot;Auto Fix On Save&quot; in your VS Code settings:
-									<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"
-										integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg=="
-										crossorigin="anonymous" referrerPolicy="no-referrer"></script>
-									<link rel="stylesheet"
-										href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css"
-										integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ=="
-										crossorigin="anonymous" referrerPolicy="no-referrer" />
-									<pre id="1874cc74-3d8b-80ba-bb99-f36b0bd69a0b" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&quot;editor.codeActionsOnSave&quot;: {
+console.log(username);</code></pre></div></details></div></details></li></ul></div></details><details open=""><summary style="font-weight:600;font-size:1.5em;line-height:1.3;margin:0">Using ESLint</summary><div class="indented"><details open=""><summary style="font-weight:600;font-size:1.25em;line-height:1.3;margin:0">Linting Files</summary><div class="indented"><p id="1874cc74-3d8b-8058-97f1-f6357197d934" class="">To check your code for linting issues:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1874cc74-3d8b-806b-82cf-edec3ba29ca1" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">npm run lint</code></pre></div></details><details open=""><summary style="font-weight:600;font-size:1.25em;line-height:1.3;margin:0">Auto-fixing Issues</summary><div class="indented"><p id="1874cc74-3d8b-8028-bc20-d46f5faec278" class="">To automatically fix issues where possible:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1874cc74-3d8b-8068-af2a-f4f1cdbc6776" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">npm run lint:fix</code></pre></div></details></div></details><details open=""><summary style="font-weight:600;font-size:1.5em;line-height:1.3;margin:0">Integrations</summary><div class="indented"><details open=""><summary style="font-weight:600;font-size:1.25em;line-height:1.3;margin:0">VS Code</summary><div class="indented"><ol type="1" id="1874cc74-3d8b-80e4-9d87-c114cc159845" class="numbered-list" start="1"><li>Install the &quot;ESLint&quot; extension from the VS Code marketplace.</li></ol><ol type="1" id="1874cc74-3d8b-80d7-86ea-e7934b5ce22e" class="numbered-list" start="2"><li>Enable &quot;Auto Fix On Save&quot; in your VS Code settings:<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1874cc74-3d8b-80ba-bb99-f36b0bd69a0b" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&quot;editor.codeActionsOnSave&quot;: {
   &quot;source.fixAll.eslint&quot;: true
-}</code></pre>
-								</li>
-							</ol>
-						</div>
-					</details>
-					<details open="">
-						<summary style="font-weight:600;font-size:1.25em;line-height:1.3;margin:0">Prettier Integration
-						</summary>
-						<div class="indented">
-							<p id="1874cc74-3d8b-80e5-a824-f0e3fd8dd28f" class="">If using Prettier, install and
-								configure <code>eslint-config-prettier</code>:</p>
-							<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"
-								integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg=="
-								crossorigin="anonymous" referrerPolicy="no-referrer"></script>
-							<link rel="stylesheet"
-								href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css"
-								integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ=="
-								crossorigin="anonymous" referrerPolicy="no-referrer" />
-							<pre id="1874cc74-3d8b-80b0-be20-ecf2fb7da934"
-								class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">npm install eslint-config-prettier --save-dev</code></pre>
-							<p id="1874cc74-3d8b-80f4-a382-c49d52515bb8" class="">Add it to your <code>.eslintrc</code>
-								file:</p>
-							<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"
-								integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg=="
-								crossorigin="anonymous" referrerPolicy="no-referrer"></script>
-							<link rel="stylesheet"
-								href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css"
-								integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ=="
-								crossorigin="anonymous" referrerPolicy="no-referrer" />
-							<pre id="1874cc74-3d8b-80c8-b726-c2a013c83fe7" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&quot;extends&quot;: [
+}</code></pre></li></ol></div></details><details open=""><summary style="font-weight:600;font-size:1.25em;line-height:1.3;margin:0">Prettier Integration</summary><div class="indented"><p id="1874cc74-3d8b-80e5-a824-f0e3fd8dd28f" class="">If using Prettier, install and configure <code>eslint-config-prettier</code>:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1874cc74-3d8b-80b0-be20-ecf2fb7da934" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">npm install eslint-config-prettier --save-dev</code></pre><p id="1874cc74-3d8b-80f4-a382-c49d52515bb8" class="">Add it to your <code>.eslintrc</code> file:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1874cc74-3d8b-80c8-b726-c2a013c83fe7" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">&quot;extends&quot;: [
   &quot;eslint:recommended&quot;,
   &quot;prettier&quot;
-]</code></pre>
-						</div>
-					</details>
-				</div>
-			</details>
-			<details open="">
-				<summary style="font-weight:600;font-size:1.5em;line-height:1.3;margin:0">Common Rules</summary>
-				<div class="indented">
-					<div id="1874cc74-3d8b-80d4-bbd9-caf5a67a196d" class="collection-content">
-						<h4 class="collection-title"></h4>
-						<table class="collection-content">
-							<thead>
-								<tr>
-									<th><span class="icon property-icon"><svg role="graphics-symbol" viewBox="0 0 16 16"
-												style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0"
-												class="typesTitle">
-												<path
-													d="M0.637695 13.1914C1.0957 13.1914 1.32812 13 1.47852 12.5215L2.24414 10.3887H6.14746L6.90625 12.5215C7.05664 13 7.2959 13.1914 7.74707 13.1914C8.22559 13.1914 8.5332 12.9043 8.5332 12.4531C8.5332 12.2891 8.50586 12.1523 8.44434 11.9678L5.41602 3.79199C5.2041 3.21777 4.82129 2.9375 4.19922 2.9375C3.60449 2.9375 3.21484 3.21777 3.0166 3.78516L-0.0322266 12.002C-0.09375 12.1797 -0.121094 12.3232 -0.121094 12.4668C-0.121094 12.918 0.166016 13.1914 0.637695 13.1914ZM2.63379 9.12402L4.17871 4.68066H4.21973L5.76465 9.12402H2.63379ZM12.2793 13.2324C13.3115 13.2324 14.2891 12.6787 14.7129 11.8037H14.7402V12.5762C14.7471 12.9863 15.0273 13.2393 15.4238 13.2393C15.834 13.2393 16.1143 12.9795 16.1143 12.5215V8.00977C16.1143 6.49902 14.9658 5.52148 13.1543 5.52148C11.7666 5.52148 10.6592 6.08887 10.2695 6.99121C10.1943 7.15527 10.1533 7.3125 10.1533 7.46289C10.1533 7.81152 10.4062 8.04395 10.7686 8.04395C11.0215 8.04395 11.2129 7.94824 11.3496 7.73633C11.7529 6.99121 12.2861 6.65625 13.1064 6.65625C14.0977 6.65625 14.6992 7.20996 14.6992 8.1123V8.67285L12.5664 8.7959C10.7686 8.8916 9.77734 9.69824 9.77734 11.0107C9.77734 12.3369 10.8096 13.2324 12.2793 13.2324ZM12.6621 12.1387C11.8008 12.1387 11.2129 11.667 11.2129 10.9561C11.2129 10.2725 11.7598 9.82129 12.7578 9.75977L14.6992 9.62988V10.3203C14.6992 11.3457 13.7969 12.1387 12.6621 12.1387Z">
-												</path>
-											</svg></span>Rule Name</th>
-									<th><span class="icon property-icon"><svg role="graphics-symbol" viewBox="0 0 16 16"
-												style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0"
-												class="typesText">
-												<path
-													d="M1.56738 3.25879H14.4258C14.7676 3.25879 15.0479 2.97852 15.0479 2.63672C15.0479 2.29492 14.7744 2.02148 14.4258 2.02148H1.56738C1.21875 2.02148 0.952148 2.29492 0.952148 2.63672C0.952148 2.97852 1.22559 3.25879 1.56738 3.25879ZM1.56738 6.84082H14.4258C14.7676 6.84082 15.0479 6.56055 15.0479 6.21875C15.0479 5.87695 14.7744 5.60352 14.4258 5.60352H1.56738C1.21875 5.60352 0.952148 5.87695 0.952148 6.21875C0.952148 6.56055 1.22559 6.84082 1.56738 6.84082ZM1.56738 10.4229H14.4258C14.7676 10.4229 15.0479 10.1426 15.0479 9.80078C15.0479 9.45898 14.7744 9.18555 14.4258 9.18555H1.56738C1.21875 9.18555 0.952148 9.45898 0.952148 9.80078C0.952148 10.1426 1.22559 10.4229 1.56738 10.4229ZM1.56738 14.0049H8.75879C9.10059 14.0049 9.38086 13.7246 9.38086 13.3828C9.38086 13.041 9.10742 12.7676 8.75879 12.7676H1.56738C1.21875 12.7676 0.952148 13.041 0.952148 13.3828C0.952148 13.7246 1.22559 14.0049 1.56738 14.0049Z">
-												</path>
-											</svg></span>Description</th>
-									<th><span class="icon property-icon"><svg role="graphics-symbol" viewBox="0 0 16 16"
-												style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0"
-												class="typesText">
-												<path
-													d="M1.56738 3.25879H14.4258C14.7676 3.25879 15.0479 2.97852 15.0479 2.63672C15.0479 2.29492 14.7744 2.02148 14.4258 2.02148H1.56738C1.21875 2.02148 0.952148 2.29492 0.952148 2.63672C0.952148 2.97852 1.22559 3.25879 1.56738 3.25879ZM1.56738 6.84082H14.4258C14.7676 6.84082 15.0479 6.56055 15.0479 6.21875C15.0479 5.87695 14.7744 5.60352 14.4258 5.60352H1.56738C1.21875 5.60352 0.952148 5.87695 0.952148 6.21875C0.952148 6.56055 1.22559 6.84082 1.56738 6.84082ZM1.56738 10.4229H14.4258C14.7676 10.4229 15.0479 10.1426 15.0479 9.80078C15.0479 9.45898 14.7744 9.18555 14.4258 9.18555H1.56738C1.21875 9.18555 0.952148 9.45898 0.952148 9.80078C0.952148 10.1426 1.22559 10.4229 1.56738 10.4229ZM1.56738 14.0049H8.75879C9.10059 14.0049 9.38086 13.7246 9.38086 13.3828C9.38086 13.041 9.10742 12.7676 8.75879 12.7676H1.56738C1.21875 12.7676 0.952148 13.041 0.952148 13.3828C0.952148 13.7246 1.22559 14.0049 1.56738 14.0049Z">
-												</path>
-											</svg></span>Level</th>
-									<th><span class="icon property-icon"><svg role="graphics-symbol" viewBox="0 0 16 16"
-												style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0"
-												class="typesText">
-												<path
-													d="M1.56738 3.25879H14.4258C14.7676 3.25879 15.0479 2.97852 15.0479 2.63672C15.0479 2.29492 14.7744 2.02148 14.4258 2.02148H1.56738C1.21875 2.02148 0.952148 2.29492 0.952148 2.63672C0.952148 2.97852 1.22559 3.25879 1.56738 3.25879ZM1.56738 6.84082H14.4258C14.7676 6.84082 15.0479 6.56055 15.0479 6.21875C15.0479 5.87695 14.7744 5.60352 14.4258 5.60352H1.56738C1.21875 5.60352 0.952148 5.87695 0.952148 6.21875C0.952148 6.56055 1.22559 6.84082 1.56738 6.84082ZM1.56738 10.4229H14.4258C14.7676 10.4229 15.0479 10.1426 15.0479 9.80078C15.0479 9.45898 14.7744 9.18555 14.4258 9.18555H1.56738C1.21875 9.18555 0.952148 9.45898 0.952148 9.80078C0.952148 10.1426 1.22559 10.4229 1.56738 10.4229ZM1.56738 14.0049H8.75879C9.10059 14.0049 9.38086 13.7246 9.38086 13.3828C9.38086 13.041 9.10742 12.7676 8.75879 12.7676H1.56738C1.21875 12.7676 0.952148 13.041 0.952148 13.3828C0.952148 13.7246 1.22559 14.0049 1.56738 14.0049Z">
-												</path>
-											</svg></span>Example</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr id="1874cc74-3d8b-8061-bfea-e40887958e7d">
-									<td class="cell-title"><a
-											href="https://www.notion.so/semi-1874cc743d8b8061bfeae40887958e7d?pvs=21">semi</a>
-									</td>
-									<td class="cell-yZrf">Enforce semicolons</td>
-									<td class="cell-P:@:">Error</td>
-									<td class="cell-:PGz"><strong>Incorrect:</strong> <code>const x = 5</code>
-										<strong>Correct:</strong> <code>const x = 5;</code></td>
-								</tr>
-								<tr id="1874cc74-3d8b-805b-8268-d17b3f5be367">
-									<td class="cell-title"><a
-											href="https://www.notion.so/quotes-1874cc743d8b805b8268d17b3f5be367?pvs=21">quotes</a>
-									</td>
-									<td class="cell-yZrf">Use single or double quotes consistently</td>
-									<td class="cell-P:@:">Error</td>
-									<td class="cell-:PGz"><strong>Incorrect:</strong>
-										<code>const a = &quot;hello&quot;; const b = &#x27;world&#x27;;</code>
-										<strong>Correct:</strong>
-										<code>const a = &quot;hello&quot;; const b = &quot;world&quot;;</code></td>
-								</tr>
-								<tr id="1874cc74-3d8b-80d1-ab0c-d228ac805c03">
-									<td class="cell-title"><a
-											href="https://www.notion.so/eqeqeq-1874cc743d8b80d1ab0cd228ac805c03?pvs=21">eqeqeq</a>
-									</td>
-									<td class="cell-yZrf">Require the use of <code>===</code> and <code>!==</code></td>
-									<td class="cell-P:@:">Warning</td>
-									<td class="cell-:PGz"><strong>Incorrect:</strong> <code>if (a == 5)</code>
-										<strong>Correct:</strong> <code>if (a === 5)</code></td>
-								</tr>
-								<tr id="1874cc74-3d8b-8075-a8ac-fc9aa2534f45">
-									<td class="cell-title"><a
-											href="https://www.notion.so/no-console-1874cc743d8b8075a8acfc9aa2534f45?pvs=21">no-console</a>
-									</td>
-									<td class="cell-yZrf">Warns against using <code>console</code> methods</td>
-									<td class="cell-P:@:">Warning</td>
-									<td class="cell-:PGz"><strong>Incorrect:</strong>
-										<code>console.log(&quot;Debug&quot;);</code> <strong>Correct:</strong>
-										<code>// Remove console.log or use a logging library.</code></td>
-								</tr>
-								<tr id="1874cc74-3d8b-8029-bf83-fd402f8866aa">
-									<td class="cell-title"><a
-											href="https://www.notion.so/no-debugger-1874cc743d8b8029bf83fd402f8866aa?pvs=21">no-debugger</a>
-									</td>
-									<td class="cell-yZrf">Disallows <code>debugger</code> statements</td>
-									<td class="cell-P:@:">Error</td>
-									<td class="cell-:PGz"><strong>Incorrect:</strong> <code>debugger;</code>
-										<strong>Correct:</strong> <code>// Remove debugger.</code></td>
-								</tr>
-								<tr id="1874cc74-3d8b-807a-ab82-f967848a79c9">
-									<td class="cell-title"><a
-											href="https://www.notion.so/curly-1874cc743d8b807aab82f967848a79c9?pvs=21">curly</a>
-									</td>
-									<td class="cell-yZrf">Enforces curly braces for all control statements</td>
-									<td class="cell-P:@:">Error</td>
-									<td class="cell-:PGz"><strong>Incorrect:</strong>
-										<code>if (a) console.log(a);</code> <strong>Correct:</strong>
-										<code>if (a) { console.log(a); }</code></td>
-								</tr>
-								<tr id="1874cc74-3d8b-80d6-9752-ed1e9f504d20">
-									<td class="cell-title"><a
-											href="https://www.notion.so/no-eval-1874cc743d8b80d69752ed1e9f504d20?pvs=21">no-eval</a>
-									</td>
-									<td class="cell-yZrf">Disallows <code>eval()</code> to prevent security risks</td>
-									<td class="cell-P:@:">Error</td>
-									<td class="cell-:PGz"><strong>Incorrect:</strong>
-										<code>eval(&quot;2 + 2&quot;);</code> <strong>Correct:</strong>
-										<code>const result = 2 + 2;</code></td>
-								</tr>
-								<tr id="1874cc74-3d8b-80ee-b560-fe2e96865d2a">
-									<td class="cell-title"><a
-											href="https://www.notion.so/no-unused-expressions-1874cc743d8b80eeb560fe2e96865d2a?pvs=21">no-unused-expressions</a>
-									</td>
-									<td class="cell-yZrf">Warns about unused expressions with no side effects</td>
-									<td class="cell-P:@:">Warning</td>
-									<td class="cell-:PGz"><strong>Incorrect:</strong>
-										<code>value &amp;&amp; doSomething();</code> <strong>Correct:</strong>
-										<code>if (value) { doSomething(); }</code></td>
-								</tr>
-								<tr id="1874cc74-3d8b-80a7-be5f-ef48411757dd">
-									<td class="cell-title"><a
-											href="https://www.notion.so/yoda-1874cc743d8b80a7be5fef48411757dd?pvs=21">yoda</a>
-									</td>
-									<td class="cell-yZrf">Disallows &quot;Yoda conditions&quot; (e.g.,
-										<code>5 === value</code>)</td>
-									<td class="cell-P:@:">Error</td>
-									<td class="cell-:PGz"><strong>Incorrect:</strong> <code>if (5 === value)</code>
-										<strong>Correct:</strong> <code>if (value === 5)</code></td>
-								</tr>
-								<tr id="1874cc74-3d8b-80dd-ba7d-d04913d15dc9">
-									<td class="cell-title"><a
-											href="https://www.notion.so/no-var-1874cc743d8b80ddba7dd04913d15dc9?pvs=21">no-var</a>
-									</td>
-									<td class="cell-yZrf">Disallows <code>var</code>; use <code>let</code> or
-										<code>const</code> instead</td>
-									<td class="cell-P:@:">Error</td>
-									<td class="cell-:PGz"><strong>Incorrect:</strong> <code>var x = 5;</code>
-										<strong>Correct:</strong> <code>let x = 5;</code> or <code>const x = 5;</code>
-									</td>
-								</tr>
-								<tr id="1874cc74-3d8b-8079-a00e-e3b56ec7b0f2">
-									<td class="cell-title"><a
-											href="https://www.notion.so/indent-1874cc743d8b8079a00ee3b56ec7b0f2?pvs=21">indent</a>
-									</td>
-									<td class="cell-yZrf">Enforces consistent indentation (e.g., 2 spaces)</td>
-									<td class="cell-P:@:">Error</td>
-									<td class="cell-:PGz"><strong>Incorrect:</strong>
-										<code>function greet() {\n console.log(&quot;Hi!&quot;);\n}</code>
-										<strong>Correct:</strong>
-										<code>function greet() {\n console.log(&quot;Hi!&quot;);\n}</code></td>
-								</tr>
-							</tbody>
-						</table><br /><br />
-					</div>
-					<p id="1874cc74-3d8b-80db-ac00-e1e5a75ca1aa" class="">For the complete list of rules, visit the <a
-							href="https://eslint.org/docs/rules/">ESLint rules documentation</a>.</p>
-				</div>
-			</details>
-			<details open="">
-				<summary style="font-weight:600;font-size:1.5em;line-height:1.3;margin:0">Best Practices </summary>
-				<div class="indented">
-					<ul id="1874cc74-3d8b-80cb-9acd-c4952181e537" class="bulleted-list">
-						<li style="list-style-type:disc">Always lint your code before committing changes.</li>
-					</ul>
-					<ul id="1874cc74-3d8b-805a-b7f3-f2dbe19f3278" class="bulleted-list">
-						<li style="list-style-type:disc">Use the <code>lint:fix</code> script to automatically resolve
-							minor issues.</li>
-					</ul>
-					<ul id="1874cc74-3d8b-80ea-b626-f120c9b5b1b4" class="bulleted-list">
-						<li style="list-style-type:disc">Keep your <code>.eslintrc</code> file consistent across all
-							projects.</li>
-					</ul>
-					<ul id="1874cc74-3d8b-80fb-b0ff-f6d75844b73a" class="bulleted-list">
-						<li style="list-style-type:disc">Periodically review and update your ESLint configuration to
-							align with modern practices.</li>
-					</ul>
-				</div>
-			</details>
-			<hr id="18f4cc74-3d8b-80d7-b3cc-f3f28a3b93b6" />
-			<p id="18f4cc74-3d8b-80f6-bba8-c061c67b2c62" class=""><strong> Company Name:</strong> Endless Raven</p>
-			<p id="18f4cc74-3d8b-8059-b4ed-dea925fc77ba" class=""><strong> Writer:</strong> Pasith Senevirathna</p>
-			<p id="18f4cc74-3d8b-8086-9c0f-eb48ab220b98" class=""><strong> Position:</strong> Backend Developer and
-				DevOps</p>
-			<p id="18f4cc74-3d8b-80bb-bc4d-f429a737aab1" class=""><strong> Contact Email:</strong> <a
-					href="mailto:pasith.senevi02@gmail.com">pasith.senevi02@gmail.com</a></p>
-			<p id="1854cc74-3d8b-80b8-aa61-c1fb3f9ce7bf" class="">
-			</p>
-		</div>
-	</article><span class="sans" style="font-size:14px;padding-top:2em"></span>
-</body>
-
-</html>
+]</code></pre></div></details></div></details><details open=""><summary style="font-weight:600;font-size:1.5em;line-height:1.3;margin:0">Common Rules</summary><div class="indented"><div id="1874cc74-3d8b-80d4-bbd9-caf5a67a196d" class="collection-content"><h4 class="collection-title"></h4><table class="collection-content"><thead><tr><th><span class="icon property-icon"><svg role="graphics-symbol" viewBox="0 0 16 16" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0" class="typesTitle"><path d="M0.637695 13.1914C1.0957 13.1914 1.32812 13 1.47852 12.5215L2.24414 10.3887H6.14746L6.90625 12.5215C7.05664 13 7.2959 13.1914 7.74707 13.1914C8.22559 13.1914 8.5332 12.9043 8.5332 12.4531C8.5332 12.2891 8.50586 12.1523 8.44434 11.9678L5.41602 3.79199C5.2041 3.21777 4.82129 2.9375 4.19922 2.9375C3.60449 2.9375 3.21484 3.21777 3.0166 3.78516L-0.0322266 12.002C-0.09375 12.1797 -0.121094 12.3232 -0.121094 12.4668C-0.121094 12.918 0.166016 13.1914 0.637695 13.1914ZM2.63379 9.12402L4.17871 4.68066H4.21973L5.76465 9.12402H2.63379ZM12.2793 13.2324C13.3115 13.2324 14.2891 12.6787 14.7129 11.8037H14.7402V12.5762C14.7471 12.9863 15.0273 13.2393 15.4238 13.2393C15.834 13.2393 16.1143 12.9795 16.1143 12.5215V8.00977C16.1143 6.49902 14.9658 5.52148 13.1543 5.52148C11.7666 5.52148 10.6592 6.08887 10.2695 6.99121C10.1943 7.15527 10.1533 7.3125 10.1533 7.46289C10.1533 7.81152 10.4062 8.04395 10.7686 8.04395C11.0215 8.04395 11.2129 7.94824 11.3496 7.73633C11.7529 6.99121 12.2861 6.65625 13.1064 6.65625C14.0977 6.65625 14.6992 7.20996 14.6992 8.1123V8.67285L12.5664 8.7959C10.7686 8.8916 9.77734 9.69824 9.77734 11.0107C9.77734 12.3369 10.8096 13.2324 12.2793 13.2324ZM12.6621 12.1387C11.8008 12.1387 11.2129 11.667 11.2129 10.9561C11.2129 10.2725 11.7598 9.82129 12.7578 9.75977L14.6992 9.62988V10.3203C14.6992 11.3457 13.7969 12.1387 12.6621 12.1387Z"></path></svg></span>Rule Name</th><th><span class="icon property-icon"><svg role="graphics-symbol" viewBox="0 0 16 16" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0" class="typesText"><path d="M1.56738 3.25879H14.4258C14.7676 3.25879 15.0479 2.97852 15.0479 2.63672C15.0479 2.29492 14.7744 2.02148 14.4258 2.02148H1.56738C1.21875 2.02148 0.952148 2.29492 0.952148 2.63672C0.952148 2.97852 1.22559 3.25879 1.56738 3.25879ZM1.56738 6.84082H14.4258C14.7676 6.84082 15.0479 6.56055 15.0479 6.21875C15.0479 5.87695 14.7744 5.60352 14.4258 5.60352H1.56738C1.21875 5.60352 0.952148 5.87695 0.952148 6.21875C0.952148 6.56055 1.22559 6.84082 1.56738 6.84082ZM1.56738 10.4229H14.4258C14.7676 10.4229 15.0479 10.1426 15.0479 9.80078C15.0479 9.45898 14.7744 9.18555 14.4258 9.18555H1.56738C1.21875 9.18555 0.952148 9.45898 0.952148 9.80078C0.952148 10.1426 1.22559 10.4229 1.56738 10.4229ZM1.56738 14.0049H8.75879C9.10059 14.0049 9.38086 13.7246 9.38086 13.3828C9.38086 13.041 9.10742 12.7676 8.75879 12.7676H1.56738C1.21875 12.7676 0.952148 13.041 0.952148 13.3828C0.952148 13.7246 1.22559 14.0049 1.56738 14.0049Z"></path></svg></span>Description</th><th><span class="icon property-icon"><svg role="graphics-symbol" viewBox="0 0 16 16" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0" class="typesText"><path d="M1.56738 3.25879H14.4258C14.7676 3.25879 15.0479 2.97852 15.0479 2.63672C15.0479 2.29492 14.7744 2.02148 14.4258 2.02148H1.56738C1.21875 2.02148 0.952148 2.29492 0.952148 2.63672C0.952148 2.97852 1.22559 3.25879 1.56738 3.25879ZM1.56738 6.84082H14.4258C14.7676 6.84082 15.0479 6.56055 15.0479 6.21875C15.0479 5.87695 14.7744 5.60352 14.4258 5.60352H1.56738C1.21875 5.60352 0.952148 5.87695 0.952148 6.21875C0.952148 6.56055 1.22559 6.84082 1.56738 6.84082ZM1.56738 10.4229H14.4258C14.7676 10.4229 15.0479 10.1426 15.0479 9.80078C15.0479 9.45898 14.7744 9.18555 14.4258 9.18555H1.56738C1.21875 9.18555 0.952148 9.45898 0.952148 9.80078C0.952148 10.1426 1.22559 10.4229 1.56738 10.4229ZM1.56738 14.0049H8.75879C9.10059 14.0049 9.38086 13.7246 9.38086 13.3828C9.38086 13.041 9.10742 12.7676 8.75879 12.7676H1.56738C1.21875 12.7676 0.952148 13.041 0.952148 13.3828C0.952148 13.7246 1.22559 14.0049 1.56738 14.0049Z"></path></svg></span>Level</th><th><span class="icon property-icon"><svg role="graphics-symbol" viewBox="0 0 16 16" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0" class="typesText"><path d="M1.56738 3.25879H14.4258C14.7676 3.25879 15.0479 2.97852 15.0479 2.63672C15.0479 2.29492 14.7744 2.02148 14.4258 2.02148H1.56738C1.21875 2.02148 0.952148 2.29492 0.952148 2.63672C0.952148 2.97852 1.22559 3.25879 1.56738 3.25879ZM1.56738 6.84082H14.4258C14.7676 6.84082 15.0479 6.56055 15.0479 6.21875C15.0479 5.87695 14.7744 5.60352 14.4258 5.60352H1.56738C1.21875 5.60352 0.952148 5.87695 0.952148 6.21875C0.952148 6.56055 1.22559 6.84082 1.56738 6.84082ZM1.56738 10.4229H14.4258C14.7676 10.4229 15.0479 10.1426 15.0479 9.80078C15.0479 9.45898 14.7744 9.18555 14.4258 9.18555H1.56738C1.21875 9.18555 0.952148 9.45898 0.952148 9.80078C0.952148 10.1426 1.22559 10.4229 1.56738 10.4229ZM1.56738 14.0049H8.75879C9.10059 14.0049 9.38086 13.7246 9.38086 13.3828C9.38086 13.041 9.10742 12.7676 8.75879 12.7676H1.56738C1.21875 12.7676 0.952148 13.041 0.952148 13.3828C0.952148 13.7246 1.22559 14.0049 1.56738 14.0049Z"></path></svg></span>Example</th></tr></thead><tbody><tr id="1874cc74-3d8b-8061-bfea-e40887958e7d"><td class="cell-title"><a href="https://www.notion.so/semi-1874cc743d8b8061bfeae40887958e7d?pvs=21">semi</a></td><td class="cell-yZrf">Enforce semicolons</td><td class="cell-P:@:">Error</td><td class="cell-:PGz"><strong>Incorrect:</strong> <code>const x = 5</code>  <strong>Correct:</strong> <code>const x = 5;</code></td></tr><tr id="1874cc74-3d8b-805b-8268-d17b3f5be367"><td class="cell-title"><a href="https://www.notion.so/quotes-1874cc743d8b805b8268d17b3f5be367?pvs=21">quotes</a></td><td class="cell-yZrf">Use single or double quotes consistently</td><td class="cell-P:@:">Error</td><td class="cell-:PGz"><strong>Incorrect:</strong> <code>const a = &quot;hello&quot;; const b = &#x27;world&#x27;;</code>  <strong>Correct:</strong> <code>const a = &quot;hello&quot;; const b = &quot;world&quot;;</code></td></tr><tr id="1874cc74-3d8b-80d1-ab0c-d228ac805c03"><td class="cell-title"><a href="https://www.notion.so/eqeqeq-1874cc743d8b80d1ab0cd228ac805c03?pvs=21">eqeqeq</a></td><td class="cell-yZrf">Require the use of <code>===</code> and <code>!==</code></td><td class="cell-P:@:">Warning</td><td class="cell-:PGz"><strong>Incorrect:</strong> <code>if (a == 5)</code>  <strong>Correct:</strong> <code>if (a === 5)</code></td></tr><tr id="1874cc74-3d8b-8075-a8ac-fc9aa2534f45"><td class="cell-title"><a href="https://www.notion.so/no-console-1874cc743d8b8075a8acfc9aa2534f45?pvs=21">no-console</a></td><td class="cell-yZrf">Warns against using <code>console</code> methods</td><td class="cell-P:@:">Warning</td><td class="cell-:PGz"><strong>Incorrect:</strong> <code>console.log(&quot;Debug&quot;);</code>  <strong>Correct:</strong> <code>// Remove console.log or use a logging library.</code></td></tr><tr id="1874cc74-3d8b-8029-bf83-fd402f8866aa"><td class="cell-title"><a href="https://www.notion.so/no-debugger-1874cc743d8b8029bf83fd402f8866aa?pvs=21">no-debugger</a></td><td class="cell-yZrf">Disallows <code>debugger</code> statements</td><td class="cell-P:@:">Error</td><td class="cell-:PGz"><strong>Incorrect:</strong> <code>debugger;</code>  <strong>Correct:</strong> <code>// Remove debugger.</code></td></tr><tr id="1874cc74-3d8b-807a-ab82-f967848a79c9"><td class="cell-title"><a href="https://www.notion.so/curly-1874cc743d8b807aab82f967848a79c9?pvs=21">curly</a></td><td class="cell-yZrf">Enforces curly braces for all control statements</td><td class="cell-P:@:">Error</td><td class="cell-:PGz"><strong>Incorrect:</strong> <code>if (a) console.log(a);</code>  <strong>Correct:</strong> <code>if (a) { console.log(a); }</code></td></tr><tr id="1874cc74-3d8b-80d6-9752-ed1e9f504d20"><td class="cell-title"><a href="https://www.notion.so/no-eval-1874cc743d8b80d69752ed1e9f504d20?pvs=21">no-eval</a></td><td class="cell-yZrf">Disallows <code>eval()</code> to prevent security risks</td><td class="cell-P:@:">Error</td><td class="cell-:PGz"><strong>Incorrect:</strong> <code>eval(&quot;2 + 2&quot;);</code>  <strong>Correct:</strong> <code>const result = 2 + 2;</code></td></tr><tr id="1874cc74-3d8b-80ee-b560-fe2e96865d2a"><td class="cell-title"><a href="https://www.notion.so/no-unused-expressions-1874cc743d8b80eeb560fe2e96865d2a?pvs=21">no-unused-expressions</a></td><td class="cell-yZrf">Warns about unused expressions with no side effects</td><td class="cell-P:@:">Warning</td><td class="cell-:PGz"><strong>Incorrect:</strong> <code>value &amp;&amp; doSomething();</code>  <strong>Correct:</strong> <code>if (value) { doSomething(); }</code></td></tr><tr id="1874cc74-3d8b-80a7-be5f-ef48411757dd"><td class="cell-title"><a href="https://www.notion.so/yoda-1874cc743d8b80a7be5fef48411757dd?pvs=21">yoda</a></td><td class="cell-yZrf">Disallows &quot;Yoda conditions&quot; (e.g., <code>5 === value</code>)</td><td class="cell-P:@:">Error</td><td class="cell-:PGz"><strong>Incorrect:</strong> <code>if (5 === value)</code>  <strong>Correct:</strong> <code>if (value === 5)</code></td></tr><tr id="1874cc74-3d8b-80dd-ba7d-d04913d15dc9"><td class="cell-title"><a href="https://www.notion.so/no-var-1874cc743d8b80ddba7dd04913d15dc9?pvs=21">no-var</a></td><td class="cell-yZrf">Disallows <code>var</code>; use <code>let</code> or <code>const</code> instead</td><td class="cell-P:@:">Error</td><td class="cell-:PGz"><strong>Incorrect:</strong> <code>var x = 5;</code>  <strong>Correct:</strong> <code>let x = 5;</code> or <code>const x = 5;</code></td></tr><tr id="1874cc74-3d8b-8079-a00e-e3b56ec7b0f2"><td class="cell-title"><a href="https://www.notion.so/indent-1874cc743d8b8079a00ee3b56ec7b0f2?pvs=21">indent</a></td><td class="cell-yZrf">Enforces consistent indentation (e.g., 2 spaces)</td><td class="cell-P:@:">Error</td><td class="cell-:PGz"><strong>Incorrect:</strong> <code>function greet() {\n console.log(&quot;Hi!&quot;);\n}</code>  <strong>Correct:</strong> <code>function greet() {\n console.log(&quot;Hi!&quot;);\n}</code></td></tr></tbody></table><br/><br/></div><p id="1874cc74-3d8b-80db-ac00-e1e5a75ca1aa" class="">For the complete list of rules, visit the <a href="https://eslint.org/docs/rules/">ESLint rules documentation</a>.</p></div></details><details open=""><summary style="font-weight:600;font-size:1.5em;line-height:1.3;margin:0">Best Practices </summary><div class="indented"><ul id="1874cc74-3d8b-80cb-9acd-c4952181e537" class="bulleted-list"><li style="list-style-type:disc">Always lint your code before committing changes.</li></ul><ul id="1874cc74-3d8b-805a-b7f3-f2dbe19f3278" class="bulleted-list"><li style="list-style-type:disc">Use the <code>lint:fix</code> script to automatically resolve minor issues.</li></ul><ul id="1874cc74-3d8b-80ea-b626-f120c9b5b1b4" class="bulleted-list"><li style="list-style-type:disc">Keep your <code>.eslintrc</code> file consistent across all projects.</li></ul><ul id="1874cc74-3d8b-80fb-b0ff-f6d75844b73a" class="bulleted-list"><li style="list-style-type:disc">Periodically review and update your ESLint configuration to align with modern practices.</li></ul></div></details><hr id="18f4cc74-3d8b-80d7-b3cc-f3f28a3b93b6"/><p id="18f4cc74-3d8b-80f6-bba8-c061c67b2c62" class=""><strong>     Company Name:</strong> Endless Raven</p><p id="18f4cc74-3d8b-8059-b4ed-dea925fc77ba" class=""><strong>     Writer:</strong> Pasith Senevirathna</p><p id="18f4cc74-3d8b-8086-9c0f-eb48ab220b98" class=""><strong>     Position:</strong> Backend Developer and DevOps</p><p id="18f4cc74-3d8b-80bb-bc4d-f429a737aab1" class=""><strong>     Contact Email:</strong> <a href="mailto:pasith.senevi02@gmail.com">pasith.senevi02@gmail.com</a></p><p id="1854cc74-3d8b-80b8-aa61-c1fb3f9ce7bf" class="">
+</p></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>
